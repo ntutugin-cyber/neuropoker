@@ -9,3 +9,6 @@ XML-контент загружается через fetch, поэтому ну�
 ```bash
 cd neuropoker
 python -m http.server 8080
+```
+
+После чего запуск по адресу: http://localhost:8080/
