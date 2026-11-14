@@ -26,10 +26,7 @@ NP.Game = {
       const style = NP.Settings.style === 'mix' ? keys[NP.rndi(keys.length)] : NP.Settings.style;
       const prof = NP.BOT_STYLES[style] || NP.BOT_STYLES.sticky;
       const isNN = NP.Settings.opp === 'nn' && NP.Settings.opponents === 1 && i === 1;
-      this.players.push({
-        name: isNN ? 'Нейросеть' : prof.name + ' ' + i,
-        emoji: isNN ? '🧠' : prof.emoji, isHuman: false, style, isNN
-      });
+      this.players.push({ name: isNN ? 'Нейросеть' : prof.name + ' ' + i, emoji: isNN ? '🧠' : prof.emoji, isHuman: false, style, isNN });
     }
   },
 
@@ -96,15 +93,12 @@ NP.Game = {
   startHand() {
     const aliveStacks = this.stacks.filter(s => s > 0).length;
     if (this.stacks[0] <= 0 || aliveStacks < 2) { this.showMatchEnd(); return; }
-    // выбывшие получают 0 и не участвуют
     this.token++; this.handNo++; this.busy = false; this.review = []; this.street = 0; this.lastAgg = null;
     const sb = NP.Settings.blinds, bb = sb * 2;
-    // Для простоты движок играет всеми, у кого стек > 0; выбывшие сидят с 0.
     this.hand = new NP.PokerHand(this.stacks, this.button, sb, bb);
     NP.$('#winBanner').classList.remove('on');
     NP.$('#nextRow').classList.remove('on');
     NP.$('#resultModal').classList.remove('on');
-    NP.$('#think1')?.classList.remove('on');
     NP.$('#mHandNo').textContent = this.handNo;
     NP.$('#mBlinds').textContent = sb + '/' + bb;
     NP.$('#nnTrainNote').textContent = 'Модель: ' + NP.fmt(NP.Model.hands) + ' раздач';
@@ -250,6 +244,115 @@ NP.Game = {
 
   catLabel(cat) { return ['Старшая карта', 'Пара', 'Две пары', 'Тройка', 'Стрит', 'Флеш', 'Фулл-хаус', 'Каре', 'Стрит-флеш'][cat]; },
 
+  tieLabels(cat) {
+    return {
+      0: ['старшая карта', 'вторая карта', 'третья карта', 'четвёртая карта', 'пятая карта'],
+      1: ['ранг пары', 'первый кикер', 'второй кикер', 'третий кикер'],
+      2: ['старшая пара', 'младшая пара', 'кикер (пятая карта)'],
+      3: ['ранг тройки', 'первый кикер', 'второй кикер'],
+      4: ['старшая карта стрита'],
+      5: ['старшая карта флеша', 'вторая карта', 'третья карта', 'четвёртая карта', 'пятая карта'],
+      6: ['ранг тройки', 'ранг пары'],
+      7: ['ранг каре', 'кикер'],
+      8: ['старшая карта стрит-флеша']
+    }[cat] || [];
+  },
+
+  compareSteps(a, b, nameA = 'Вы', nameB = 'Соперник') {
+    const steps = [];
+    if (a.cat !== b.cat) {
+      const winName = a.cat > b.cat ? nameA : nameB;
+      steps.push({ kind: 'diff', text: `Категории разные: ${nameA} — <b>${this.catLabel(a.cat)}</b>, ${nameB} — <b>${this.catLabel(b.cat)}</b>. <b>${this.catLabel(Math.max(a.cat, b.cat))}</b> старше, поэтому побеждает <b>${winName}</b>. Кикеры в этом случае не сравниваются.` });
+      return steps;
+    }
+    steps.push({ kind: 'same', text: `Категория одинаковая: у обоих <b>${this.catLabel(a.cat)}</b>. Значит, сравниваем карты по старшинству по очереди.` });
+    const labels = this.tieLabels(a.cat);
+    const len = Math.max(a.t.length, b.t.length);
+    for (let i = 0; i < len; i++) {
+      const av = a.t[i] || 0, bv = b.t[i] || 0;
+      const label = labels[i] || `карта №${i + 1}`;
+      if (av === bv) {
+        steps.push({ kind: 'equal', text: `${label}: <b>${NP.rlabel(av)}</b> = <b>${NP.rlabel(bv)}</b> — равно, смотрим следующую карту.` });
+      } else {
+        const winName = av > bv ? nameA : nameB;
+        steps.push({ kind: 'win', text: `${label}: у ${nameA} <b>${NP.rlabel(av)}</b>, у ${nameB} <b>${NP.rlabel(bv)}</b>. <b>${NP.rlabel(Math.max(av, bv))}</b> старше → побеждает <b>${winName}</b>. Дальше карты не сравниваются.` });
+        return steps;
+      }
+    }
+    steps.push({ kind: 'equal', text: `Все пять карт совпали по рангам — <b>ничья</b>, банк делится поровну.` });
+    return steps;
+  },
+
+  pickCompareOpponent(s) {
+    const alive = s.inHand.map((v, i) => v ? i : -1).filter(i => i > 0);
+    if (!alive.length) return null;
+    if (s.reason === 'showdown') {
+      let best = alive[0], bs = -1;
+      for (const i of alive) { const sc = s.eval[i]?.score ?? -1; if (sc > bs) { bs = sc; best = i; } }
+      return best;
+    }
+    return s.winner > 0 ? s.winner : alive[0];
+  },
+
+  comparisonSection(s) {
+    const opp = this.pickCompareOpponent(s);
+    if (opp == null || s.board.length < 3) return '';
+    const a = s.eval?.[0] || NP.evaluate7([...s.hole[0], ...s.board]);
+    const b = s.eval?.[opp] || NP.evaluate7([...s.hole[opp], ...s.board]);
+    const steps = this.compareSteps(a, b, 'Вы', this.who(opp));
+    const note = s.reason === 'fold' ? `<div class="cmp-note">⚠️ Сравнение на момент последнего фолда: открыто ${s.board.length}/5 общих карт. Будущие карты могли изменить результат.</div>` : '';
+    return `<div class="res-sec"><div class="h">🔍 Почему именно такой результат — по шагам</div>${note}<div class="cmp-steps">${steps.map(st => `<div class="cmp-step ${st.kind}">${st.text}</div>`).join('')}</div></div>`;
+  },
+
+  analyzeFold(s, fold) {
+    const p = fold.p, w = s.winner;
+    const lines = [];
+    const known = s.board.length;
+    const toCall = fold.toCall ?? 0;
+    const pot = fold.pot ?? 0;
+    const potOdds = toCall > 0 ? toCall / (pot + toCall) : 0;
+    const strength = fold.strength ?? NP.handStrength(s.hole[p], s.board).s;
+    const name = this.who(p);
+
+    lines.push(`Момент: <b>${NP.STAGES[fold.stage]}</b>, общих карт открыто ${known}/5. Нужно было доплатить <b>${NP.fmt(toCall)}</b> в банк <b>${NP.fmt(pot)}</b> → пот-оддсы <b>${Math.round(potOdds * 100)}%</b>.`);
+
+    if (known >= 3) {
+      const fEv = NP.evaluate7([...s.hole[p], ...s.board]);
+      const wEv = NP.evaluate7([...s.hole[w], ...s.board]);
+      lines.push(`Что было на руках в этот момент: ${name} — <b>${NP.comboName(fEv)}</b>; ${this.who(w)} (забрал банк) — <b>${NP.comboName(wEv)}</b>.`);
+      const cmp = this.compareSteps(fEv, wEv, name, this.who(w));
+      lines.push(`Кто был впереди на открытом борде: ${cmp[cmp.length - 1].text}`);
+      if (fEv.score > wEv.score) {
+        lines.push(`На известном борде ${name} <b>был впереди</b>. Сбрасывать руку, которая сейчас лучше, обычно слишком осторожно — но оставшиеся ${5 - known} карт(ы) могли всё поменять.`);
+      } else if (fEv.score < wEv.score) {
+        lines.push(`На открытом борде ${name} <b>был позади</b>. Если бы он продолжил и борд не изменился, он бы проиграл — фолд выглядит логичным.`);
+      } else {
+        lines.push(`На открытом борде руки были равны.`);
+      }
+    } else {
+      lines.push(`Фолд произошёл до флопа: готовых комбинаций ещё нет, решение принимается по силе двух карманных карт.`);
+      lines.push(`Карманные карты ${name}: <b>${this.cardsText(s.hole[p])}</b>. Оценка силы старта ≈ <b>${Math.round(strength * 100)}%</b>.`);
+    }
+
+    let verdict;
+    if (toCall === 0) verdict = 'Фолд был не нужен — можно было сделать бесплатный чек.';
+    else if (strength + .06 < potOdds) verdict = `Фолд <b class="green-t">оправдан</b>: сила руки (~${Math.round(strength * 100)}%) заметно ниже цены колла (${Math.round(potOdds * 100)}%). Платить было невыгодно.`;
+    else if (strength > potOdds + .18) verdict = `Фолд <b class="red-t">слишком осторожен</b>: цена колла всего ${Math.round(potOdds * 100)}%, а рука тянет на ~${Math.round(strength * 100)}%. Часто выгоднее было продолжить.`;
+    else verdict = `Решение <b class="gold-t">пограничное</b>: цена и сила руки близки. Можно было как сбросить, так и продолжить — зависит от стиля соперника и позиции.`;
+    lines.push(verdict);
+
+    return lines;
+  },
+
+  foldAnalysisSection(s) {
+    if (!s.folds.length) return '';
+    const blocks = s.folds.map(fold => {
+      const lines = this.analyzeFold(s, fold);
+      return `<div class="fold-block"><div class="fold-title">${this.who(fold.p)} сбросил карты</div>${lines.map(l => `<div class="fold-line">${l}</div>`).join('')}</div>`;
+    }).join('');
+    return `<div class="res-sec"><div class="h">🧠 Разбор фолдов — оправданно ли сдались</div>${blocks}</div>`;
+  },
+
   explainResult(s) {
     const lines = [];
     const humanDelta = s.delta[0];
@@ -258,12 +361,22 @@ NP.Game = {
       lines.push(`Раздача закончилась <b>без вскрытия</b>: все соперники сбросили карты. Последний фолд — ${this.who(lastFold.p)} на улице «${NP.STAGES[lastFold.stage]}». Победитель забирает банк без сравнения комбинаций.`);
       if (s.lastAgg) lines.push(`Решающее давление: ${this.who(s.lastAgg.p)} повысил до <b>${NP.fmt(s.lastAgg.amt)}</b>. После этого никто не ответил.`);
       lines.push(`${this.who(s.winner)} забирает банк <b>${NP.fmt(s.potTotal)}</b>. ${s.winner === 0 ? 'Вы выиграли за счёт давления — комбинации не сравнивались.' : 'Вы сбросили карты, поэтому не участвовали в распределении банка.'}`);
+      if (s.folds.length) lines.push(`Ниже — подробный разбор каждого фолда: что было на руках, кто был впереди на открытом борде и стоило ли сбрасывать.`);
     } else {
       lines.push(`Раздача дошла до <b>вскрытия</b>: сравниваются лучшие пятёрки из семи карт.`);
       s.players.forEach((pl, i) => {
         if (!s.inHand[i]) lines.push(`${pl.name}: фолд — не участвует во вскрытии.`);
         else if (s.eval[i]) lines.push(`${pl.name}: <b>${NP.comboName(s.eval[i])}</b> (${this.cardsText(s.hole[i])} + борд).`);
       });
+      const mainPot = s.pots[0];
+      if (mainPot?.winners?.length && s.inHand[0]) {
+        const w = mainPot.winners[0];
+        const opp = w === 0 ? this.pickCompareOpponent(s) : w;
+        if (opp != null && s.eval[0] && s.eval[opp]) {
+          const steps = this.compareSteps(s.eval[0], s.eval[opp], 'Вы', this.who(opp));
+          lines.push(`<b>Ключевая причина вашего результата:</b> ${steps[steps.length - 1].text}`);
+        }
+      }
       if (s.pots.length > 1) {
         lines.push(`Были <b>сайд-поты</b>: когда кто-то идёт олл-ин на меньшую сумму, банк делится на части. Каждый сайд-пот разыгрывается только между теми, кто вложил в него фишки.`);
         s.pots.forEach((pot, k) => {
@@ -288,7 +401,7 @@ NP.Game = {
     const handBlock = p => {
       const pl = s.players[p], alive = s.inHand[p];
       const won = s.winnings[p] > 0;
-      const ev = alive ? (s.eval[p] || (s.board.length ? NP.evaluate7([...s.hole[p], ...s.board]) : null)) : null;
+      const ev = alive ? (s.eval[p] || (s.board.length >= 3 ? NP.evaluate7([...s.hole[p], ...s.board]) : null)) : null;
       const combo = ev ? NP.comboName(ev) : 'Карты сброшены';
       const best = ev ? NP.bestFive([...s.hole[p], ...s.board]) : s.hole[p];
       const keys = new Set(best.map(NP.ckey));
@@ -312,6 +425,8 @@ NP.Game = {
           <div class="res-sub">Раздача №${s.handNo} · ${s.reason === 'fold' ? 'все сбросили' : 'вскрытие'} · ${s.players.length} игрока · ${new Date(s.ts).toLocaleString('ru-RU')}</div></div>
         <div class="res-delta ${deltaCls}">${s.delta[0] >= 0 ? '+' : ''}${NP.fmt(s.delta[0])}</div></div>
       <div class="res-why">${this.explainResult(s).map(l => `<div class="why-line">${l}</div>`).join('')}</div>
+      ${this.comparisonSection(s)}
+      ${this.foldAnalysisSection(s)}
       <div class="res-sec"><div class="h">🃏 Общие карты</div><div class="res-board"><span class="rb-lbl">Борд</span><div class="cardrow tight">${boardCards}</div></div></div>
       <div class="res-sec"><div class="h">🆚 Руки игроков</div><div class="res-hands">${s.players.map((_, i) => handBlock(i)).join('')}</div></div>
       <div class="res-sec"><div class="h">💰 Банки</div><div class="res-math">${potsHTML}</div></div>

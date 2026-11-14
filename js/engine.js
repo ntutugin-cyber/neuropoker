@@ -91,8 +91,10 @@ NP.PokerHand = class {
     if (!L) return [];
     this.decisions[p]++; this.totalActs++;
     if (a === 'fold') {
-      this.inHand[p] = false; this.foldedBy.push({ p, stage: this.stage }); this.acted[p] = true;
-      this.events.push({ t: 'act', p, a: 'fold', amt: 0 });
+      const strength = NP.handStrength(this.hole[p], this.board);
+      const ctx = { p, stage: this.stage, toCall: L.toCall, pot: L.potNow, strength: strength.s, draw: strength.draw };
+      this.inHand[p] = false; this.foldedBy.push(ctx); this.acted[p] = true;
+      this.events.push({ t: 'act', p, a: 'fold', amt: 0, ...ctx });
     } else if (a === 'check') {
       this.acted[p] = true; this.events.push({ t: 'act', p, a: 'check', amt: 0 });
     } else if (a === 'call') {
@@ -215,7 +217,6 @@ NP.PokerHand = class {
   }
 };
 
-/* Бот со стилем игры. Все стили сопротивляются давлению сильнее старого бота. */
 NP.decideBot = function (hand, p, styleKey) {
   const prof = NP.BOT_STYLES[styleKey] || NP.BOT_STYLES.sticky;
   const { s, draw } = NP.handStrength(hand.hole[p], hand.board);
@@ -245,5 +246,4 @@ NP.decideBot = function (hand, p, styleKey) {
   return { a: 'check' };
 };
 
-/* Совместимость со старым кодом/лабораторией */
 NP.algoDecide = (hand, p, cfg) => NP.decideBot(hand, p, cfg?.style || 'tag');
