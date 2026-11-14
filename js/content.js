@@ -1,8 +1,7 @@
 window.NP = window.NP || {};
 
 NP.Content = {
-  terms: [], lessons: [], combos: [], exam: [], map: {},
-  ok: false, error: null,
+  terms: [], lessons: [], combos: [], exam: [], map: {}, ok: false, error: null,
 
   async load() {
     try {
@@ -13,9 +12,25 @@ NP.Content = {
       ]);
       this.terms = this.parseTerms(t);
       this.combos = this.parseCombos(c);
-      const parsed = this.parseLessons(l);
-      this.lessons = parsed.lessons;
-      this.exam = parsed.exam;
+      const base = this.parseLessons(l);
+      this.lessons = base.lessons;
+      this.exam = base.exam;
+
+      // Дополнительные термины и уроки (не обязательные файлы)
+      try {
+        const ta = await this.fetchXML('data/terms_advanced.xml');
+        const extra = this.parseTerms(ta);
+        const ids = new Set(this.terms.map(x => x.id));
+        extra.forEach(x => { if (!ids.has(x.id)) this.terms.push(x); });
+      } catch {}
+      try {
+        const la = await this.fetchXML('data/lessons_advanced.xml');
+        const adv = this.parseLessons(la);
+        const ids = new Set(this.lessons.map(x => x.id));
+        adv.lessons.forEach(x => { if (!ids.has(x.id)) this.lessons.push(x); });
+        if (adv.exam.length) this.exam = adv.exam;
+      } catch {}
+
       this.map = Object.fromEntries(this.terms.map(x => [x.id, x]));
       this.ok = true;
     } catch (e) {
@@ -79,18 +94,10 @@ NP.Content = {
         else if (type === 'quiz') steps.push(this.parseQuiz(sn));
         else if (type === 'pick') steps.push({ type, q: sn.getAttribute('q'), cards: sn.getAttribute('cards'), correct: +sn.getAttribute('correct'), hint: sn.getAttribute('hint') || '', explain: this.txt(sn, 'explain') });
         else if (type === 'vs') steps.push({ type, q: sn.getAttribute('q'), a: sn.getAttribute('a'), b: sn.getAttribute('b'), winner: +sn.getAttribute('winner'), hint: sn.getAttribute('hint') || '', explain: this.txt(sn, 'explain') });
-        else if (type === 'exam') {
-          exam = [...sn.querySelectorAll('question')].map(q => this.parseQuiz(q));
-          steps.push({ type: 'exam' });
-        }
+        else if (type === 'exam') { exam = [...sn.querySelectorAll('question')].map(q => this.parseQuiz(q)); steps.push({ type: 'exam' }); }
         else steps.push({ type });
       }
-      lessons.push({
-        id: ln.getAttribute('id'),
-        title: ln.getAttribute('title'),
-        sub: ln.getAttribute('sub') || '',
-        steps
-      });
+      lessons.push({ id: ln.getAttribute('id'), title: ln.getAttribute('title'), sub: ln.getAttribute('sub') || '', steps });
     }
     return { lessons, exam };
   }
