@@ -12,4 +12,5 @@ python -m http.server 8080
 ```
 
 После чего запуск по адресу: http://localhost:8080/
+
 Либо можно попытаться зайти на сайт: https://ntutugin-cyber.github.io/neuropoker/
