@@ -1,0 +1,573 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<terms version="1">
+  <term id="pot" title="Банк (пот)" cat="Ставки">
+    <def>Все фишки, уже поставленные в текущей раздаче. Победитель забирает банк целиком.</def>
+    <example>В банке 120, соперник ставит 40. После вашего колла банк будет 200.</example>
+    <related>call potodds valuebet</related>
+  </term>
+  <term id="stack" title="Стек" cat="Основы">
+    <def>Все фишки, которые есть у игрока. Глубокий стек позволяет маневрировать, короткий вынужден рисковать всем.</def>
+    <example>Стек 1000 при блайндах 5/10 — это 100 больших блайндов.</example>
+    <related>chips allin bb</related>
+  </term>
+  <term id="chips" title="Фишки" cat="Основы">
+    <def>Игровые деньги покера. Ими делают ставки; реальные деньги в раздаче не участвуют.</def>
+    <example>Вы поставили 30 фишек — это бет.</example>
+    <related>pot stack</related>
+  </term>
+  <term id="holdem" title="Техасский Холдем" cat="Основы">
+    <def>Самый популярный вид покера: 2 карманные карты и 5 общих. Из семи карт собираются лучшие пять.</def>
+    <example>Именно в холдем вы играете в этом приложении.</example>
+    <related>hole board bestfive</related>
+  </term>
+  <term id="heads-up" title="Хедз-ап" cat="Основы">
+    <def>Покер один на один. Баттон платит малый блайнд и ходит первым на префлопе.</def>
+    <example>Все раздачи в этом приложении — хедз-ап.</example>
+    <related>button sb bb</related>
+  </term>
+  <term id="button" title="Баттон (дилер)" cat="Стол">
+    <def>Фишка условного дилера. Определяет блайнды и порядок хода. В хедз-апе баттон = малый блайнд.</def>
+    <example>Вы на баттоне — после флопа у вас позиция.</example>
+    <related>position sb bb</related>
+  </term>
+  <term id="blind" title="Блайнды" cat="Стол">
+    <def>Принудительные ставки до раздачи карт. Создают начальный банк.</def>
+    <example>Блайнды 5/10 означают SB 5 и BB 10.</example>
+    <related>sb bb pot</related>
+  </term>
+  <term id="sb" title="Малый блайнд (SB)" cat="Стол">
+    <def>Меньшая обязательная ставка. В хедз-апе её платит игрок на баттоне.</def>
+    <example>SB 5 при BB 10.</example>
+    <related>blind button bb</related>
+  </term>
+  <term id="bb" title="Большой блайнд (BB)" cat="Стол">
+    <def>Большая обязательная ставка. Обычно вдвое больше малого блайнда. Единица измерения стека и ставок.</def>
+    <example>Стек 1000 при BB 10 = 100bb.</example>
+    <related>blind sb stack</related>
+  </term>
+  <term id="position" title="Позиция" cat="Стол">
+    <def>Порядок хода относительно соперника. Ходить последним выгодно: вы видите его решение первым.</def>
+    <example>На флопе вы ходите вторым — вы в позиции.</example>
+    <related>ip oop button</related>
+  </term>
+  <term id="ip" title="В позиции (IP)" cat="Стол">
+    <def>Вы ходите после соперника на улицах после флопа. Информационное преимущество.</def>
+    <example>Баттон в хедз-апе всегда в позиции после флопа.</example>
+    <related>position oop</related>
+  </term>
+  <term id="oop" title="Без позиции (OOP)" cat="Стол">
+    <def>Вы ходите первым после флопа. Приходится действовать без информации о ходе соперника.</def>
+    <example>Большой блайнд без баттона играет без позиции.</example>
+    <related>position ip</related>
+  </term>
+  <term id="hole" title="Карманные карты" cat="Карты">
+    <def>Две закрытые карты, которые получает каждый игрок. Видите их только вы.</def>
+    <example>A♠ K♠ — сильная карманная рука.</example>
+    <related>board pocketpair suited</related>
+  </term>
+  <term id="board" title="Борд / общие карты" cat="Карты">
+    <def>Пять открытых карт в центре стола. Ими пользуются оба игрока.</def>
+    <example>Борд K♠ 9♣ 4♦ 2♥ 7♠.</example>
+    <related>flop turn river texture</related>
+  </term>
+  <term id="street" title="Улица" cat="Раздача">
+    <def>Этап раздачи со своим кругом торговли: префлоп, флоп, тёрн, ривер.</def>
+    <example>На каждой улице можно ставить, повышать или сбрасывать.</example>
+    <related>preflop flop turn river</related>
+  </term>
+  <term id="preflop" title="Префлоп" cat="Раздача">
+    <def>Первый круг торговли. У игроков только две карманные карты, общих карт нет.</def>
+    <example>С A♠ K♥ на префлопе обычно рейз.</example>
+    <related>hole flop blind</related>
+  </term>
+  <term id="flop" title="Флоп" cat="Раздача">
+    <def>Первые три общие карты и второй круг торговли. Самый информативный этап.</def>
+    <example>Флоп K♦ 9♣ 4♠ — у вас топ-пара.</example>
+    <related>board turn cbet</related>
+  </term>
+  <term id="turn" title="Тёрн" cat="Раздача">
+    <def>Четвёртая общая карта и третий круг торговли.</def>
+    <example>Тёрн 7♥ усилил ваш стрит-дро.</example>
+    <related>board river</related>
+  </term>
+  <term id="river" title="Ривер" cat="Раздача">
+    <def>Пятая, последняя общая карта и финальный круг торговли.</def>
+    <example>На ривере дро не доехало — можно блефовать.</example>
+    <related>board showdown bluff</related>
+  </term>
+  <term id="showdown" title="Шоудаун / вскрытие" cat="Раздача">
+    <def>Сравнение комбинаций, если после ривера оба игрока остались в раздаче.</def>
+    <example>На шоудауне пара тузов победила пару королей.</example>
+    <related>bestfive kicker pot</related>
+  </term>
+  <term id="fold" title="Фолд" cat="Действия">
+    <def>Сбросить карты и выйти из раздачи. Уже поставленные фишки остаются в банке.</def>
+    <example>С 7♣ 2♦ против рейза — фолд.</example>
+    <related>muck pot</related>
+  </term>
+  <term id="check" title="Чек" cat="Действия">
+    <def>Пропустить ход, не ставя. Доступен, если в текущем круге никто не ставил.</def>
+    <example>Соперник чек — можно сделать чек вслед или бет.</example>
+    <related>bet cbet</related>
+  </term>
+  <term id="call" title="Колл" cat="Действия">
+    <def>Уравнять ставку соперника, положив столько же фишек.</def>
+    <example>Ставка 30, ваш колл 30.</example>
+    <related>pot potodds raise</related>
+  </term>
+  <term id="bet" title="Бет" cat="Действия">
+    <def>Первая ставка в круге торговли, если до вас никто не ставил.</def>
+    <example>Вы ставите 40 в банк 60 — это бет.</example>
+    <related>raise pot valuebet</related>
+  </term>
+  <term id="raise" title="Рейз" cat="Действия">
+    <def>Повышение чужой ставки. Минимальный рейз обычно не меньше предыдущего повышения.</def>
+    <example>Соперник 20, вы до 60 — это рейз.</example>
+    <related>threebet allin minraise</related>
+  </term>
+  <term id="threebet" title="3-бет" cat="Действия">
+    <def>Первый ререйз: блайнды — первая ставка, опен-рейз — 2-бет, ререйз — 3-бет.</def>
+    <example>Вы рейзите префлоп-рейз соперника — это 3-бет.</example>
+    <related>raise range</related>
+  </term>
+  <term id="allin" title="Олл-ин" cat="Действия">
+    <def>Поставить все оставшиеся фишки. После этого вы не принимаете решений до конца раздачи.</def>
+    <example>Олл-ин 500 в банк 300 — максимальное давление.</example>
+    <related>stack showdown</related>
+  </term>
+  <term id="muck" title="Мuck / сброс" cat="Действия">
+    <def>Сбросить карты рубашкой вверх, не показывая их. Обычно происходит при фолде.</def>
+    <example>Вы сфолдили, и карты ушли в muck.</example>
+    <related>fold showdown</related>
+  </term>
+  <term id="checkraise" title="Чек-рейз" cat="Действия">
+    <def>Чек, а после ставки соперника — рейз. Часто используется как ловушка с сильной рукой.</def>
+    <example>Флопнул сет, чек-рейз — и соперник платит.</example>
+    <related>check raise trap</related>
+  </term>
+  <term id="cbet" title="Си-бет" cat="Действия">
+    <def>Ставка на флопе от игрока, который рейзил на префлопе. Продолжение агрессии.</def>
+    <example>Вы рейзили префлоп, флоп сухой — си-бет ½ банка.</example>
+    <related>flop bluff semibluff</related>
+  </term>
+  <term id="donk" title="Донк-бет" cat="Действия">
+    <def>Ставка первым от игрока без позиции против префлоп-агрессора. Часто ошибка новичка.</def>
+    <example>Вы на BB ставите первым на флопе против рейзера — донк-бет.</example>
+    <related>oop cbet</related>
+  </term>
+  <term id="limp" title="Лимп" cat="Действия">
+    <def>Просто уравнять большой блайнд на префлопе вместо рейза.</def>
+    <example>Баттон колл 10 вместо рейза — лимп.</example>
+    <related>call bb raise</related>
+  </term>
+  <term id="combo" title="Комбинация" cat="Комбинации">
+    <def>Лучшая пятёрка карт из семи доступных. Категории от старшей карты до стрит-флеша.</def>
+    <example>Флеш — комбинация из пяти карт одной масти.</example>
+    <related>bestfive flush pair</related>
+  </term>
+  <term id="bestfive" title="Лучшие пять из семи" cat="Комбинации">
+    <def>Главное правило шоудауна: считаются только пять лучших карт, две лишние отбрасываются.</def>
+    <example>Из A♠ K♠ + борд A♦ K♦ 2♣ 3♥ 9♠ лучшие пять — две пары A и K.</example>
+    <related>showdown kicker combo</related>
+  </term>
+  <term id="kicker" title="Кикер" cat="Комбинации">
+    <def>Старшая дополнительная карта, решающая спор при одинаковых комбинациях.</def>
+    <example>У обоих пара тузов; ваш кикер K бьёт его Q.</example>
+    <related>pair showdown bestfive</related>
+  </term>
+  <term id="nuts" title="Натс" cat="Комбинации">
+    <def>Лучшая возможная рука на данном борде. Натс не может проиграть никому.</def>
+    <example>На борде A♠ K♠ Q♠ J♠ 3♦ рука 10♠ даёт натс.</example>
+    <related>royal board</related>
+  </term>
+  <term id="rank" title="Ранг" cat="Карты">
+    <def>Достоинство карты: 2,3,4,5,6,7,8,9,10,J,Q,K,A.</def>
+    <example>Король старше дамы.</example>
+    <related>suit ace</related>
+  </term>
+  <term id="suit" title="Масть" cat="Карты">
+    <def>Одна из четырёх групп карт: ♠ ♥ ♦ ♣. В холдеме масти равноправны, важны для флеша.</def>
+    <example>Пять червей — флеш.</example>
+    <related>flush suited</related>
+  </term>
+  <term id="ace" title="Туз" cat="Карты">
+    <def>Самая старшая карта. В стрите может быть младшим: A-2-3-4-5.</def>
+    <example>A♠ A♥ — лучшая карманная пара.</example>
+    <related>wheel broadway pocketpair</related>
+  </term>
+  <term id="wheel" title="Колесо (A-2-3-4-5)" cat="Комбинации">
+    <def>Младший стрит, где туз играет как единица.</def>
+    <example>A♣ 2♦ 3♥ 4♠ 5♣ — стрит до пятёрки.</example>
+    <related>straight ace</related>
+  </term>
+  <term id="broadway" title="Бродвей" cat="Комбинации">
+    <def>Стрит 10-J-Q-K-A, самый старший стрит.</def>
+    <example>10♠ J♥ Q♦ K♣ A♠ — бродвей.</example>
+    <related>straight ace</related>
+  </term>
+  <term id="connector" title="Коннекторы" cat="Карты">
+    <def>Карманные карты соседних рангов: 8-7, J-10. Хороши для стритов.</def>
+    <example>8♥ 7♥ — одномастные коннекторы.</example>
+    <related>suited straightdraw</related>
+  </term>
+  <term id="suited" title="Одномастные (s)" cat="Карты">
+    <def>Карманные карты одной масти. Дают дополнительный шанс флеша.</def>
+    <example>A♠ K♠ записывается как AKs.</example>
+    <related>offsuit flushdraw</related>
+  </term>
+  <term id="offsuit" title="Разномастные (o)" cat="Карты">
+    <def>Карманные карты разных мастей. Шанс флеша ниже.</def>
+    <example>A♠ K♥ записывается как AKo.</example>
+    <related>suited</related>
+  </term>
+  <term id="pocketpair" title="Карманная пара" cat="Карты">
+    <def>Две карманные карты одного ранга: 22…AA.</def>
+    <example>K♥ K♦ — карманная пара королей.</example>
+    <related>hole set</related>
+  </term>
+  <term id="highcard" title="Старшая карта" cat="Комбинации">
+    <def>Комбинация, когда не собралось ничего: считается самая старшая карта.</def>
+    <example>A♠ J♦ 9♣ 6♥ 3♠ — старшая карта туз.</example>
+    <related>combo kicker</related>
+  </term>
+  <term id="pair" title="Пара" cat="Комбинации">
+    <def>Две карты одного ранга.</def>
+    <example>A♠ A♥ K♦ 9♣ 5♠ — пара тузов.</example>
+    <related>twopair kicker</related>
+  </term>
+  <term id="twopair" title="Две пары" cat="Комбинации">
+    <def>Две разные пары плюс пятая карта.</def>
+    <example>J♠ J♥ 8♦ 8♣ 4♠ — две пары, валеты и восьмёрки.</example>
+    <related>pair kicker</related>
+  </term>
+  <term id="trips" title="Тройка / сет" cat="Комбинации">
+    <def>Три карты одного ранга. Сет — тройка с карманной парой.</def>
+    <example>Карманные 9♠ 9♥ и борд 9♦ K♣ 2♠ — сет девяток.</example>
+    <related>pocketpair fullhouse</related>
+  </term>
+  <term id="straight" title="Стрит" cat="Комбинации">
+    <def>Пять последовательных карт любых мастей.</def>
+    <example>9♠ 8♥ 7♦ 6♣ 5♠ — стрит до девятки.</example>
+    <related>wheel broadway gutshot</related>
+  </term>
+  <term id="flush" title="Флеш" cat="Комбинации">
+    <def>Пять карт одной масти в любом порядке. Сильнее стрита, слабее фулл-хауса.</def>
+    <example>A♦ J♦ 9♦ 6♦ 3♦ — флеш до туза.</example>
+    <related>suit fullhouse flushdraw</related>
+  </term>
+  <term id="fullhouse" title="Фулл-хаус" cat="Комбинации">
+    <def>Тройка плюс пара. Сильнее флеша, слабее каре.</def>
+    <example>K♠ K♥ K♦ 7♣ 7♠ — фулл-хаус, короли и семёрки.</example>
+    <related>trips quads</related>
+  </term>
+  <term id="quads" title="Каре" cat="Комбинации">
+    <def>Четыре карты одного ранга плюс любая пятая.</def>
+    <example>9♠ 9♥ 9♦ 9♣ K♠ — каре девяток.</example>
+    <related>fullhouse straightflush</related>
+  </term>
+  <term id="straightflush" title="Стрит-флеш" cat="Комбинации">
+    <def>Стрит и флеш одновременно: пять последовательных карт одной масти.</def>
+    <example>9♥ 8♥ 7♥ 6♥ 5♥ — стрит-флеш до девятки.</example>
+    <related>royal flush straight</related>
+  </term>
+  <term id="royal" title="Роял-флеш" cat="Комбинации">
+    <def>Стрит-флеш 10-J-Q-K-A одной масти. Непобедимая рука.</def>
+    <example>A♠ K♠ Q♠ J♠ 10♠ — роял-флеш.</example>
+    <related>straightflush nuts</related>
+  </term>
+  <term id="equity" title="Эквити" cat="Математика">
+    <def>Вероятность выиграть раздачу в данный момент против руки или диапазона соперника.</def>
+    <example>Эквити 65% означает: в среднем вы выигрываете 65% таких раздач.</example>
+    <related>potodds outs draw</related>
+  </term>
+  <term id="potodds" title="Пот-оддсы" cat="Математика">
+    <def>Отношение цены колла к банку после колла. Показывает, какой процент побед нужен для выгодного колла.</def>
+    <example>Колл 25 в банк 100: 25/(100+25)=20%.</example>
+    <related>call equity ev</related>
+  </term>
+  <term id="outs" title="Ауты" cat="Математика">
+    <def>Карты, которые улучшат вашу руку до победной. Для флеш-дро обычно 9 аутов.</def>
+    <example>Четыре пики видны — ещё 9 пик в колоде.</example>
+    <related>draw flushdraw rule24</related>
+  </term>
+  <term id="draw" title="Дро" cat="Математика">
+    <def>Незавершённая комбинация: не хватает одной карты до стрита или флеша.</def>
+    <example>Флеш-дро и стрит-дро одновременно — комбо-дро.</example>
+    <related>flushdraw straightdraw semibluff</related>
+  </term>
+  <term id="flushdraw" title="Флеш-дро" cat="Математика">
+    <def>Четыре карты одной масти, нужна ещё одна той же масти.</def>
+    <example>A♠ 5♠ на борде K♠ 9♠ 2♦ — натс-флеш-дро.</example>
+    <related>flush outs nuts</related>
+  </term>
+  <term id="straightdraw" title="Стрит-дро" cat="Математика">
+    <def>Четыре последовательные карты, нужна карта с одного из краёв.</def>
+    <example>8-7-6-5: придут 9 или 4 — стрит.</example>
+    <related>oesd gutshot outs</related>
+  </term>
+  <term id="gutshot" title="Гатшот" cat="Математика">
+    <def>Дырявый стрит-дро: нужна конкретная карта в середине. Обычно 4 аута.</def>
+    <example>9-8-6-5: стрит только с семёркой.</example>
+    <related>straightdraw outs</related>
+  </term>
+  <term id="oesd" title="Открытый стрит-дро (OESD)" cat="Математика">
+    <def>Стрит-дро с двух сторон: обычно 8 аутов.</def>
+    <example>8-7-6-5 ждут 9 или 4.</example>
+    <related>straightdraw outs rule24</related>
+  </term>
+  <term id="rule24" title="Правило 2 и 4" cat="Математика">
+    <def>Быстрая оценка дро: ауты×4 на флопе, ауты×2 на тёрне.</def>
+    <example>9 аутов на флопе ≈36%, на тёрне ≈18%.</example>
+    <related>outs equity potodds</related>
+  </term>
+  <term id="implied" title="Имплайд-оддсы" cat="Математика">
+    <def>Будущие выигрыши, если дро соберётся. Оправдывают колл, когда прямые пот-оддсы чуть хуже нужных.</def>
+    <example>Колл сейчас невыгоден, но если придёт флеш, соперник заплатит ещё.</example>
+    <related>potodds stack draw</related>
+  </term>
+  <term id="foldequity" title="Фолд-эквити" cat="Математика">
+    <def>Дополнительная ценность ставки от того, что соперник может сбросить. Основа блефа.</def>
+    <example>Блеф выгоден, если соперник фолдит достаточно часто.</example>
+    <related>bluff semibluff ev</related>
+  </term>
+  <term id="ev" title="EV (ожидание)" cat="Математика">
+    <def>Средний результат решения в фишках, если повторить его много раз. Положительный EV — выгодно.</def>
+    <example>+EV колл: в среднем вы зарабатываете, даже если иногда проигрываете.</example>
+    <related>potodds equity variance</related>
+  </term>
+  <term id="valuebet" title="Вэлью-бет" cat="Стратегия">
+    <def>Ставка с сильной рукой, чтобы худшие руки соперника заплатили.</def>
+    <example>У вас сет — ставьте на вэлью, не слоуплейте.</example>
+    <related>bet callingstation slowplay</related>
+  </term>
+  <term id="bluff" title="Блеф" cat="Стратегия">
+    <def>Ставка со слабой рукой, чтобы лучшая рука соперника сбросила.</def>
+    <example>Вы промахнулись по флопу, но ставите, изображая туза.</example>
+    <related>foldequity semibluff cbet</related>
+  </term>
+  <term id="semibluff" title="Полублеф" cat="Стратегия">
+    <def>Ставка с дро: можно выиграть сразу фолдом или собрать комбинацию позже.</def>
+    <example>Флеш-дро рейз — полублеф с двумя путями к победе.</example>
+    <related>bluff draw foldequity</related>
+  </term>
+  <term id="range" title="Диапазон" cat="Стратегия">
+    <def>Все руки, с которыми игрок мог бы так играть. Думают не об одной руке, а о диапазоне.</def>
+    <example>Префлоп-рейз с баттона — широкий диапазон: пары, тузы, коннекторы.</example>
+    <related>tight loose threebet</related>
+  </term>
+  <term id="tight" title="Тайтовый" cat="Стратегия">
+    <def>Стиль: мало рук, только сильные. Новичку проще начинать тайтово.</def>
+    <example>Тайтовый диапазон — примерно лучшие 20% рук.</example>
+    <related>loose range nit</related>
+  </term>
+  <term id="loose" title="Лузовый" cat="Стратегия">
+    <def>Стиль: много рук, включая слабые.</def>
+    <example>Лузовый соперник коллирует слишком широко.</example>
+    <related>tight callingstation range</related>
+  </term>
+  <term id="aggressive" title="Агрессивный" cat="Стратегия">
+    <def>Стиль: чаще бет и рейз, чем чек и колл. Агрессия создаёт фолд-эквити.</def>
+    <example>Агрессивный игрок давит ставками на каждой улице.</example>
+    <related>passive foldequity barrel</related>
+  </term>
+  <term id="passive" title="Пассивный" cat="Стратегия">
+    <def>Стиль: чаще чек и колл. Против пассивного игрока проще вэлью-бетить.</def>
+    <example>Пассивный соперник редко рейзит без сильной руки.</example>
+    <related>aggressive callingstation</related>
+  </term>
+  <term id="slowplay" title="Слоуплей" cat="Стратегия">
+    <def>Медленный розыгрыш сильной руки: чек/колл вместо ставки, чтобы соперник не сбросил.</def>
+    <example>Сет на сухом борде можно слоуплеить, на мокром — опасно.</example>
+    <related>trap valuebet wetboard</related>
+  </term>
+  <term id="trap" title="Ловушка" cat="Стратегия">
+    <def>Слоуплей с целью спровоцировать ставки соперника. Часто чек-рейз.</def>
+    <example>Флопнул фулл-хаус — чек, ждёте его бет, затем рейз.</example>
+    <related>checkraise slowplay</related>
+  </term>
+  <term id="float" title="Флоат" cat="Стратегия">
+    <def>Колл ставки без сильной руки с планом забрать банк позже, если соперник сдастся.</def>
+    <example>Колл си-бета в позиции, чтобы поставить на тёрне после его чека.</example>
+    <related>call cbet position</related>
+  </term>
+  <term id="barrel" title="Баррель" cat="Стратегия">
+    <def>Ставка на следующей улице после си-бета. Двойной баррель — флоп+тёрн.</def>
+    <example>Си-бет флоп, бет тёрн — двойной баррель.</example>
+    <related>cbet bluff turn</related>
+  </term>
+  <term id="blocker" title="Блокер" cat="Стратегия">
+    <def>Ваша карта, которая уменьшает вероятность сильной руки у соперника.</def>
+    <example>A♠ в руке блокирует натс-флеш соперника.</example>
+    <related>nuts bluff range</related>
+  </term>
+  <term id="texture" title="Текстура борда" cat="Стратегия">
+    <def>Насколько борд опасен: сухой борд даёт мало дро, мокрый — много.</def>
+    <example>K♠ 7♦ 2♣ — сухой борд; J♠ 10♠ 9♦ — мокрый.</example>
+    <related>dryboard wetboard draw</related>
+  </term>
+  <term id="dryboard" title="Сухой борд" cat="Стратегия">
+    <def>Борд без одномастности и связности. Мало дро, си-беты часто работают.</def>
+    <example>A♠ 8♦ 3♣ — сухой борд.</example>
+    <related>texture cbet</related>
+  </term>
+  <term id="wetboard" title="Мокрый борд" cat="Стратегия">
+    <def>Борд с флеш-дро и стрит-дро. Опасно медленно играть сильную руку.</def>
+    <example>Q♠ J♠ 10♦ — очень мокрый борд.</example>
+    <related>texture draw semibluff</related>
+  </term>
+  <term id="tell" title="Теллс" cat="Психология">
+    <def>Повторяющаяся манера поведения, выдающая силу руки. В онлайне — тайминг и сайзинг.</def>
+    <example>Быстрый чек часто означает слабость.</example>
+    <related>range passive</related>
+  </term>
+  <term id="tilt" title="Тильт" cat="Психология">
+    <def>Эмоциональное состояние после проигрыша, когда решения становятся хуже.</def>
+    <example>После бэд-бита не повышайте ставки — остановитесь.</example>
+    <related>bankroll variance badbeat</related>
+  </term>
+  <term id="bankroll" title="Банкролл" cat="Психология">
+    <def>Общий запас фишек на игру. Управляйте им, чтобы пережить дисперсию.</def>
+    <example>Для кэш-игры нужен запас хотя бы 20–30 бай-инов.</example>
+    <related>variance stack tilt</related>
+  </term>
+  <term id="variance" title="Дисперсия" cat="Психология">
+    <def>Естественные колебания результата. Даже правильные решения иногда проигрывают.</def>
+    <example>Проигрыш с AA против 72 — не ошибка, а дисперсия.</example>
+    <related>equity badbeat bankroll</related>
+  </term>
+  <term id="cooler" title="Кулер" cat="Психология">
+    <def>Ситуация, где обе руки очень сильны и проигрыш почти неизбежен.</def>
+    <example>Сет против сета — кулер.</example>
+    <related>badbeat variance</related>
+  </term>
+  <term id="badbeat" title="Бэд-бит" cat="Психология">
+    <def>Проигрыш большой favorite-руки после того, как соперник догнал маловероятную карту.</def>
+    <example>Ваши AA проиграли его 72 после невероятного ривера.</example>
+    <related>variance equity cooler</related>
+  </term>
+  <term id="callingstation" title="Телефон / calling station" cat="Типы игроков">
+    <def>Игрок, который часто коллирует и редко сбрасывает. Против него не блефуйте.</def>
+    <example>Телефон заплатит с любой парой — наказывайте вэлью-бетами.</example>
+    <related>valuebet passive loose</related>
+  </term>
+  <term id="nit" title="Нит" cat="Типы игроков">
+    <def>Очень тайтовый игрок, играет только премиум-руки. Его ставкам можно верить.</def>
+    <example>Нит рейзит — у него почти всегда монстр.</example>
+    <related>tight range</related>
+  </term>
+  <term id="maniac" title="Маньяк" cat="Типы игроков">
+    <def>Очень агрессивный игрок, ставит и рейзит почти с любыми картами.</def>
+    <example>Маньяк блефует слишком много — коллируйте шире.</example>
+    <related>aggressive loose bluff</related>
+  </term>
+  <term id="fish" title="Фиш / новичок" cat="Типы игроков">
+    <def>Слабый игрок, допускающий много ошибок. Играйте просто и на вэлью.</def>
+    <example>Не блефуйте фиша, который не фолдит.</example>
+    <related>callingstation valuebet</related>
+  </term>
+  <term id="reg" title="Рег / регуляр" cat="Типы игроков">
+    <def>Постоянный игрок лимита, обычно понимающий базовую стратегию.</def>
+    <example>Рег поймёт ваш си-бет, меняйте линию.</example>
+    <related>shark gto</related>
+  </term>
+  <term id="shark" title="Шарк / сильный игрок" cat="Типы игроков">
+    <def>Сильный игрок, умеющий читать диапазоны и давить на ошибки.</def>
+    <example>Шарк заметит, что вы никогда не блефуете.</example>
+    <related>reg exploit gto</related>
+  </term>
+  <term id="gto" title="GTO" cat="Продвинутое">
+    <def>Теоретически сбалансированная стратегия, которую нельзя эксплуатировать. Новичку важнее базовая математика.</def>
+    <example>GTO смешивает вэлью и блефы в правильных пропорциях.</example>
+    <related>exploit range ev</related>
+  </term>
+  <term id="exploit" title="Эксплойт / подстройка" cat="Продвинутое">
+    <def>Отклонение от баланса ради использования конкретной слабости соперника.</def>
+    <example>Против телефона убрали блефы — это эксплойт.</example>
+    <related>gto callingstation valuebet</related>
+  </term>
+  <term id="spr" title="SPR" cat="Продвинутое">
+    <def>Отношение эффективного стека к банку на флопе. Низкий SPR — проще идти олл-ин.</def>
+    <example>SPR 2 означает, что стек всего вдвое больше банка.</example>
+    <related>stack pot allin</related>
+  </term>
+  <term id="sidepot" title="Сайд-пот" cat="Ставки">
+    <def>Дополнительный банк для игроков, у которых остались фишки, когда кто-то уже олл-ин. В хедз-апе не нужен.</def>
+    <example>В игре на троих олл-ин создаёт сайд-пот.</example>
+    <related>allin pot</related>
+  </term>
+  <term id="rake" title="Рейк" cat="Ставки">
+    <def>Комиссия покер-рума с банка. В тренажёре рейка нет.</def>
+    <example>В реальном покере рейк влияет на маржинальные коллы.</example>
+    <related>pot</related>
+  </term>
+  <term id="minraise" title="Минимальный рейз" cat="Ставки">
+    <def>Самое маленькое разрешённое повышение. Обычно не меньше размера предыдущего повышения.</def>
+    <example>Блайнды 5/10: минимальный рейз префлоп до 20.</example>
+    <related>raise bb</related>
+  </term>
+  <term id="set" title="Сет" cat="Комбинации">
+    <def>Тройка, собранная с карманной парой. Скрытая и очень сильная рука.</def>
+    <example>Карманные 8♠ 8♥ и флоп 8♦ K♣ 2♠ — сет.</example>
+    <related>pocketpair trips slowplay</related>
+  </term>
+  <term id="toppair" title="Топ-пара" cat="Стратегия">
+    <def>Пара со старшей картой борда. Хороша, но не непобедима.</def>
+    <example>Борд K♦ 9♣ 4♠, рука K♠ Q♥ — топ-пара с хорошим кикером.</example>
+    <related>pair kicker valuebet</related>
+  </term>
+  <term id="overpair" title="Оверпара" cat="Стратегия">
+    <def>Карманная пара выше старшей карты борда.</def>
+    <example>AA на борде 9♣ 6♦ 2♠ — оверпара.</example>
+    <related>pocketpair wetboard</related>
+  </term>
+  <term id="initiative" title="Инициатива" cat="Стратегия">
+    <def>Преимущество игрока, последним проявившим агрессию на предыдущей улице. Даёт право на си-бет.</def>
+    <example>Вы рейзили префлоп — у вас инициатива.</example>
+    <related>cbet aggressive</related>
+  </term>
+  <term id="runout" title="Ранаут / прогон борда" cat="Раздача">
+    <def>Автоматическое открытие оставшихся общих карт после олл-ина.</def>
+    <example>После префлоп олл-ина борд прогоняется до ривера.</example>
+    <related>allin board showdown</related>
+  </term>
+  <term id="session" title="Сессия" cat="Основы">
+    <def>Серия раздач, сыгранных подряд. Анализируйте сессии, а не отдельные раздачи.</def>
+    <example>Сессия из 300 раздач даст более надёжную статистику.</example>
+    <related>variance bankroll</related>
+  </term>
+  <term id="winrate" title="Винрейт" cat="Основы">
+    <def>Частота побед или средний выигрыш за серию раздач.</def>
+    <example>Винрейт 55% в хедз-апе — хороший результат.</example>
+    <related>session variance</related>
+  </term>
+  <term id="bot" title="Алгоритм-бот" cat="Приложение">
+    <def>Классический соперник с заранее заданными правилами: сила руки, пот-оддсы, блеф по настройке.</def>
+    <example>Алгоритм блефует с частотой 18%, если включено.</example>
+    <related>bluff range</related>
+  </term>
+  <term id="nn" title="Нейросеть" cat="Приложение">
+    <def>Самообучающийся соперник: сеть 20→48→32→5 с двумя скрытыми слоями, учится на собственных раздачах.</def>
+    <example>Нейросеть учится блефовать через награду за успешные блефы.</example>
+    <related>selfplay reward entropy</related>
+  </term>
+  <term id="selfplay" title="Самоигра" cat="Приложение">
+    <def>Обучение, где сеть играет сама с собой. Обе стороны используют одни веса.</def>
+    <example>В режиме самоигры сеть исследует обе стороны раздачи.</example>
+    <related>nn reward</related>
+  </term>
+  <term id="reward" title="Награда" cat="Приложение">
+    <def>Сигнал обучения: выигранные или проигранные фишки, превращённые в сигнал подкрепления.</def>
+    <example>Выигрыш 100 фишек даёт положительную награду.</example>
+    <related>nn ev</related>
+  </term>
+  <term id="entropy" title="Энтропия / исследование" cat="Приложение">
+    <def>Мера случайности политики сети. Высокая энтропия = больше новых вариантов.</def>
+    <example>Ползунок исследования управляет случайностью решений.</example>
+    <related>nn gto</related>
+  </term>
+  <term id="lr" title="Скорость обучения (lr)" cat="Приложение">
+    <def>Насколько сильно сеть меняет веса за один шаг. Слишком большой lr делает обучение нестабильным.</def>
+    <example>lr 0.002 — умеренный шаг обучения.</example>
+    <related>nn reward</related>
+  </term>
+</terms>

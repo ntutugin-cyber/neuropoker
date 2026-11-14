@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0a0f14">
+<title>НЕЙРОПОКЕР — покер, нейросеть и обучение с нуля</title>
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/game.css">
+<link rel="stylesheet" href="css/learn.css">
+</head>
+<body>
+<div class="aurora a1"></div><div class="aurora a2"></div>
+
+<header class="nav">
+  <div class="brand"><span class="logo">♠</span><span class="bt">НЕЙРО<em>ПОКЕР</em></span></div>
+  <nav class="tabs">
+    <button class="tab active" data-scr="game"><span class="ti">🎰</span><span>Игра</span></button>
+    <button class="tab" data-scr="learn"><span class="ti">🎓</span><span>Обучение</span></button>
+    <button class="tab" data-scr="lab" id="labTab"><span class="ti">🧠</span><span>Нейросеть</span><span class="dot"></span></button>
+  </nav>
+  <button class="snd" id="sndBtn"><span id="sndIc">🔊</span><span class="lbl" id="sndLbl">Звук вкл</span></button>
+</header>
+
+<main>
+  <!-- ================= ИГРА ================= -->
+  <section class="screen active" id="scr-game">
+    <div class="game-wrap">
+      <div>
+        <div class="match-bar">
+          <span class="chip-tag">Раздача <b id="mHandNo">1</b></span>
+          <span class="chip-tag">Блайнды <b id="mBlinds">5/10</b></span>
+          <span class="chip-tag" id="mOppTag">Соперник: <b>Алгоритм</b></span>
+          <span style="flex:1"></span>
+          <button class="btn btn-sm btn-ghost" id="reviewBtn" disabled>📋 Разбор раздачи</button>
+          <button class="btn btn-sm btn-cyan" id="coachBtn">🎓 Коуч</button>
+          <button class="btn btn-sm btn-ghost" id="glossBtn">📚 Словарь</button>
+          <button class="btn btn-sm btn-ghost" id="rulesBtn">📖 Комбинации</button>
+        </div>
+
+        <div class="ptable">
+          <div class="seat top" id="seat1">
+            <div class="avatar" id="av1">🤖<div class="act-bubble" id="bub1"></div></div>
+            <div class="info">
+              <div class="nm"><span id="nm1">Алгоритм</span><span class="dealer" id="dl1">D</span></div>
+              <div class="stack" id="st1">1 000</div>
+              <div class="think" id="think1"><i></i><i></i><i></i> думает…</div>
+              <div class="bet-bubble" id="bet1"><span class="chip-ic"></span><span>0</span></div>
+            </div>
+            <div class="cardrow tight" id="hole1"></div>
+          </div>
+
+          <div class="center-zone">
+            <div class="stage-lbl" id="stageLbl">ПРЕФЛОП</div>
+            <div class="board-row" id="boardRow"></div>
+            <div class="pot-disp" id="potDisp"><span class="chip-ic"></span>Банк: <span id="potVal">0</span></div>
+          </div>
+
+          <div class="seat bottom" id="seat0">
+            <div class="avatar" id="av0">🧑<div class="act-bubble" id="bub0"></div></div>
+            <div class="info">
+              <div class="nm"><span>Вы</span><span class="dealer" id="dl0">D</span></div>
+              <div class="stack" id="st0">1 000</div>
+              <div class="bet-bubble" id="bet0"><span class="chip-ic"></span><span>0</span></div>
+            </div>
+            <div class="cardrow tight" id="hole0"></div>
+          </div>
+
+          <div class="win-banner" id="winBanner">
+            <div class="t" id="wbT"></div><div class="s" id="wbS"></div><div class="amt" id="wbA"></div>
+          </div>
+        </div>
+
+        <div class="hint-bar" id="hintBar">
+          <span>💡</span><span id="hintCombo" class="gold-t" style="font-weight:800">—</span>
+          <span>Шанс победы: <span class="eq" id="hintEq">—</span></span>
+          <span class="dim" id="hintAdvice">—</span>
+          <button class="btn btn-sm btn-ghost" id="hintExplain" style="margin-left:auto">Почему?</button>
+        </div>
+
+        <div class="action-zone">
+          <div class="raise-row" id="raiseRow">
+            <input type="range" id="raiseSlider" min="20" max="1000" step="5" value="20">
+            <span class="raise-val" id="raiseVal">20</span>
+            <div class="presets">
+              <button class="btn btn-sm" data-pre="min">Мин</button>
+              <button class="btn btn-sm" data-pre="half">½ банка</button>
+              <button class="btn btn-sm" data-pre="pot">Банк</button>
+              <button class="btn btn-sm" data-pre="max">Олл-ин</button>
+            </div>
+          </div>
+          <div class="action-btns">
+            <button class="abtn fold" id="btnFold">Фолд</button>
+            <button class="abtn call" id="btnCall">Чек</button>
+            <button class="abtn raise" id="btnRaise">Рейз</button>
+            <button class="abtn allin" id="btnAllin">Олл-ин</button>
+          </div>
+          <div class="next-row" id="nextRow">
+            <button class="btn" id="reviewOpenBtn">📋 Изучить результат</button>
+            <button class="btn btn-gold" id="btnNext">▶ Новая раздача</button>
+          </div>
+        </div>
+      </div>
+
+      <aside class="side">
+        <div class="card-p">
+          <div class="h">⚙️ Настройки стола</div>
+          <div class="set-row"><div><div class="lab">Соперник</div><div class="desc">Со следующей раздачи</div></div>
+            <select id="setOpp" style="width:150px"><option value="algo">🤖 Алгоритм</option><option value="nn">🧠 Нейросеть</option></select></div>
+          <div class="set-row"><div><div class="lab">Алгоритм блефует</div><div class="desc">Ставки со слабой рукой</div></div>
+            <label class="toggle"><input type="checkbox" id="setBotBluff" checked><span class="tr"></span></label></div>
+          <div class="set-row"><div class="lab">Частота блефа <span class="mono gold-t" id="botBluffVal">18%</span></div>
+            <input type="range" id="setBotBluffFreq" min="0" max="50" value="18" style="width:130px"></div>
+          <div class="set-row"><div><div class="lab">Нейросеть блефует</div><div class="desc" id="nnTrainNote">Модель: 0 раздач</div></div>
+            <label class="toggle"><input type="checkbox" id="setNNBluff" checked><span class="tr"></span></label></div>
+          <div class="set-row"><div><div class="lab">Подсказки</div><div class="desc">Комбинация, эквити, совет</div></div>
+            <label class="toggle"><input type="checkbox" id="setHints" checked><span class="tr"></span></label></div>
+          <div class="set-row"><div><div class="lab">Авто-открытие разбора</div><div class="desc">Пауза и объяснение после каждой раздачи</div></div>
+            <label class="toggle"><input type="checkbox" id="setAutoReview" checked><span class="tr"></span></label></div>
+          <div class="set-row"><div class="lab">Блайнды</div>
+            <select id="setBlinds" style="width:120px"><option value="5">5 / 10</option><option value="10">10 / 20</option><option value="25">25 / 50</option></select></div>
+          <div class="set-row"><div class="lab">Стартовый стек</div>
+            <select id="setStack" style="width:120px"><option value="500">500</option><option value="1000" selected>1 000</option><option value="2000">2 000</option></select></div>
+          <div class="row" style="margin-top:12px"><button class="btn btn-danger btn-sm" id="btnNewMatch" style="flex:1">↺ Новый матч</button></div>
+        </div>
+
+        <div class="card-p">
+          <div class="h">📊 Матч</div>
+          <div class="stat-grid">
+            <div class="stat-cell"><div class="k">Раздач</div><div class="v" id="gsHands">0</div></div>
+            <div class="stat-cell"><div class="k">Ваши победы</div><div class="v" id="gsWins">0</div></div>
+            <div class="stat-cell"><div class="k">Крупнейший банк</div><div class="v" id="gsBig">0</div></div>
+            <div class="stat-cell"><div class="k">Винрейт</div><div class="v" id="gsRate">—</div></div>
+          </div>
+        </div>
+
+        <div class="card-p">
+          <div class="h">📜 Журнал раздачи <span class="sub">с временем событий</span></div>
+          <div class="log" id="gameLog"></div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ================= ОБУЧЕНИЕ ================= -->
+  <section class="screen" id="scr-learn">
+    <div class="learn-tools">
+      <button class="btn btn-cyan" id="learnGlossBtn">📚 Словарь терминов</button>
+      <button class="btn" id="learnFlashBtn">🔄 Тренажёр терминов</button>
+      <button class="btn" id="learnQuizBtn">📝 Проверка терминов</button>
+      <button class="btn btn-ghost" id="learnCoachBtn">🎓 К игре с коучем</button>
+    </div>
+    <div id="contentWarning"></div>
+    <div class="learn-wrap">
+      <div>
+        <div class="card-p learn-progress">
+          <div class="h" style="margin-bottom:8px">🎓 Курс покера с нуля <span class="sub" id="learnPct">0%</span></div>
+          <div class="bar"><i id="learnBar" style="width:0%"></i></div>
+        </div>
+        <div class="lesson-list" id="lessonList"></div>
+      </div>
+      <div class="card-p">
+        <div class="lesson-body" id="lessonBody"></div>
+        <div class="step-nav">
+          <button class="btn btn-sm" id="stepPrev">← Назад</button>
+          <div class="step-dots" id="stepDots"></div>
+          <button class="btn btn-sm btn-gold" id="stepNext">Далее →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= НЕЙРОСЕТЬ ================= -->
+  <section class="screen" id="scr-lab">
+    <div class="lab-grid">
+      <div class="lab-left">
+        <div class="card-p">
+          <div class="h">🧠 Режим самообучения</div>
+          <div class="mode-pick">
+            <div class="mode-opt sel" data-mode="self"><div class="ic">🧠⚔️🧠</div><div class="t">Сама с собой</div><div class="d">обе стороны — сеть</div></div>
+            <div class="mode-opt" data-mode="algo"><div class="ic">🧠⚔️🤖</div><div class="t">Против алгоритма</div><div class="d">спарринг с ботом</div></div>
+          </div>
+          <div class="set-row" style="margin-top:8px"><div class="lab">Скорость <span class="faint">(до ×20)</span></div><span class="speed-badge" id="speedVal">×1</span></div>
+          <input type="range" id="labSpeed" min="1" max="20" step="1" value="1">
+          <div class="lab-btns" style="margin-top:10px">
+            <button class="btn btn-cyan wide" id="labRun">▶ Начать обучение</button>
+            <button class="btn btn-sm" id="labStep">⏭ 1 раздача</button>
+            <button class="btn btn-sm btn-danger" id="labReset">↺ Сброс сети</button>
+            <button class="btn btn-sm" id="labSave">💾 Сохранить</button>
+            <button class="btn btn-sm" id="labExport">⬇ Экспорт</button>
+            <button class="btn btn-sm wide" id="labImportBtn">⬆ Импорт модели</button>
+            <input type="file" id="labImport" accept=".json" style="display:none">
+          </div>
+        </div>
+        <div class="card-p">
+          <div class="h">🎛 Параметры обучения</div>
+          <div class="set-row"><div class="lab">Шаг обучения <span class="mono cyan-t" id="lrVal">0.0020</span></div>
+            <input type="range" id="labLR" min="5" max="50" step="5" value="20" style="width:120px"></div>
+          <div class="set-row"><div class="lab">Исследование <span class="mono cyan-t" id="entVal">0.012</span></div>
+            <input type="range" id="labEnt" min="0" max="50" step="2" value="12" style="width:120px"></div>
+          <div class="set-row"><div><div class="lab">Разрешить блеф сети</div></div>
+            <label class="toggle"><input type="checkbox" id="labBluff" checked><span class="tr"></span></label></div>
+          <div class="set-row"><div><div class="lab">Учить блефу</div><div class="desc">Бонус за успешный блеф</div></div>
+            <label class="toggle"><input type="checkbox" id="labLearnBluff" checked><span class="tr"></span></label></div>
+          <div class="set-row"><div class="lab">Автосохранение</div>
+            <label class="toggle"><input type="checkbox" id="labAutoSave" checked><span class="tr"></span></label></div>
+          <div class="eval-note">Каждые 150 раздач — 40 проверочных раздач против алгоритма.</div>
+          <div class="progress-line"><i id="evalProg" style="width:0%"></i></div>
+        </div>
+        <div class="card-p">
+          <div class="h">📈 Показатели</div>
+          <div class="stat-grid">
+            <div class="stat-cell"><div class="k">Раздач</div><div class="v" id="lsHands">0</div></div>
+            <div class="stat-cell"><div class="k">Время</div><div class="v" id="lsTime">0:00</div></div>
+            <div class="stat-cell"><div class="k">Награда</div><div class="v" id="lsReward">0.00</div></div>
+            <div class="stat-cell"><div class="k">Победы vs бот</div><div class="v" id="lsWin">—</div></div>
+            <div class="stat-cell"><div class="k">Блефов</div><div class="v" id="lsBluff">0%</div></div>
+            <div class="stat-cell"><div class="k">Успех блефа</div><div class="v" id="lsBluffS">—</div></div>
+            <div class="stat-cell"><div class="k">Раздач/мин</div><div class="v" id="lsRate">0</div></div>
+            <div class="stat-cell"><div class="k">Параметров</div><div class="v" id="lsParams">2 741</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="lab-right">
+        <div class="card-p">
+          <div class="h">👁 Текущая раздача <span class="sub" id="miniHandNo">раздача 0</span></div>
+          <div class="mini-felt">
+            <div class="mini-seats">
+              <div class="mini-seat" id="ms0"><div class="nm"><span id="msNm0">Нейро A</span><span class="st" id="msSt0">1 000</span></div>
+                <div class="cardrow tight" id="msCards0" style="margin-top:6px"></div><div class="ac" id="msAc0"></div></div>
+              <div class="mini-seat" id="ms1"><div class="nm"><span id="msNm1">Нейро B</span><span class="st" id="msSt1">1 000</span></div>
+                <div class="cardrow tight" id="msCards1" style="margin-top:6px"></div><div class="ac" id="msAc1"></div></div>
+            </div>
+            <div class="mini-center"><span class="mini-pot" id="msPot">Банк 0</span><div class="cardrow tight" id="msBoard"></div><span class="chip-tag" id="msStage">префлоп</span></div>
+          </div>
+        </div>
+        <div class="charts-grid">
+          <div class="card-p chart-card"><div class="h">💰 Средняя награда</div><canvas id="chReward"></canvas></div>
+          <div class="card-p chart-card"><div class="h">🏆 Победы против алгоритма</div><canvas id="chWin"></canvas></div>
+          <div class="card-p chart-card"><div class="h">🎭 Блеф</div><div class="legend"><span><i style="background:var(--magenta)"></i>частота</span><span><i style="background:var(--green)"></i>успех</span></div><canvas id="chBluff"></canvas></div>
+        </div>
+        <div class="card-p">
+          <div class="h">🕸 Нейросеть в реальном времени</div>
+          <canvas class="net-canvas" id="netCanvas"></canvas>
+          <div class="arch-line">20 → <b class="cyan-t">48</b> → <b class="cyan-t">32</b> → 5 · два скрытых слоя · REINFORCE + Adam</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<button class="coach-fab" id="coachFab">🎓 Коуч</button>
+<div class="coach" id="coachDrawer">
+  <div class="coach-head"><div class="h">🎓 Коуч за столом</div><button class="btn btn-sm" id="coachClose">✕</button></div>
+  <div class="coach-sec"><div class="h">Текущая ситуация</div><div class="coach-live" id="coachLive">Начните раздачу.</div></div>
+  <div class="coach-sec"><div class="h">Ваши кнопки</div><div class="coach-actions" id="coachActions"></div></div>
+  <div class="coach-sec"><div class="h">Разбор раздачи</div><div class="coach-review" id="coachReview">Раздача ещё не сыграна.</div></div>
+  <div class="coach-sec"><div class="h">Словарь под рукой</div>
+    <input class="coach-search" id="coachSearch" placeholder="рейз, эквити, флоп…">
+    <div class="coach-terms" id="coachTerms"></div>
+  </div>
+  <div class="coach-sec"><div class="h">Быстрые уроки</div>
+    <div class="coach-actions">
+      <button class="btn btn-sm" data-quick="position">📍 Позиция и блайнды</button>
+      <button class="btn btn-sm" data-quick="actions">🎬 Действия</button>
+      <button class="btn btn-sm" data-quick="potodds">🧮 Пот-оддсы</button>
+      <button class="btn btn-sm" data-quick="bluff">🎭 Блеф</button>
+      <button class="btn btn-sm" id="coachFull">🎓 Полный курс</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= МОДАЛЬНЫЕ ОКНА ================= -->
+<div class="modal" id="rulesModal"><div class="modal-card">
+  <button class="modal-x" data-close="rulesModal">✕</button>
+  <div class="h" style="font-size:15px">📖 Комбинации покера</div>
+  <div id="rulesCombos"></div>
+</div></div>
+
+<div class="modal glossary-modal" id="glossModal"><div class="modal-card">
+  <button class="modal-x" data-close="glossModal">✕</button>
+  <div class="h" style="font-size:15px">📚 База терминов покера</div>
+  <div class="gl-tabs">
+    <button class="gl-tab active" data-gl="dict">Словарь</button>
+    <button class="gl-tab" data-gl="flash">Тренажёр</button>
+    <button class="gl-tab" data-gl="quiz">Проверка</button>
+  </div>
+  <div id="glBody"></div>
+</div></div>
+
+<div class="modal term-modal" id="termModal"><div class="modal-card small">
+  <button class="modal-x" data-close="termModal">✕</button>
+  <div id="termBody"></div>
+</div></div>
+
+<div class="modal" id="resultModal"><div class="modal-card result-card">
+  <button class="modal-x" data-close="resultModal">✕</button>
+  <div id="resultBody"></div>
+  <div class="result-footer">
+    <button class="btn" id="resultStay">👁 Остаться за столом</button>
+    <button class="btn btn-gold" id="resultNext">▶ Следующая раздача</button>
+  </div>
+</div></div>
+
+<div class="modal" id="confirmModal"><div class="modal-card small">
+  <div class="h" id="cfTitle">Подтверждение</div><p id="cfText" style="margin-bottom:16px"></p>
+  <div class="row"><button class="btn btn-danger" id="cfYes" style="flex:1">Да</button><button class="btn" id="cfNo" style="flex:1">Отмена</button></div>
+</div></div>
+
+<div class="modal" id="matchModal"><div class="modal-card small" style="text-align:center">
+  <div style="font-size:44px" id="mmIcon">🏆</div>
+  <div class="h" style="justify-content:center;font-size:17px" id="mmTitle">Матч окончен</div>
+  <p id="mmText" class="dim" style="margin-bottom:16px"></p>
+  <button class="btn btn-gold" id="mmNew" style="width:100%">▶ Новый матч</button>
+</div></div>
+
+<div id="toasts"></div><canvas id="confetti"></canvas>
+
+<script src="js/utils.js"></script>
+<script src="js/cards.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/nn.js"></script>
+<script src="js/content.js"></script>
+<script src="js/glossary.js"></script>
+<script src="js/learn.js"></script>
+<script src="js/coach.js"></script>
+<script src="js/game.js"></script>
+<script src="js/lab.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
